@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>duolingo do cris</title>
+    
+    <!-- Conectar o CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h2>Leticía -- traduza a frase a seguir:</h2>
+    <p id="frase-portugues">"Eu, Leticia, aceito sair com o Cris em um date super romântico 😍"</p>
+
+    <div id="palavras-disponiveis">
+        <button class="palavra">Yo</button>
+        <button class="palavra">Leticia</button>
+        <button class="palavra">acepto</button>
+        <button class="palavra">salir</button>
+        <button class="palavra">con</button>
+        <button class="palavra">Cris</button>
+        <button class="palavra">en</button>
+        <button class="palavra">una</button>
+        <button class="palavra">cita</button>
+        <button class="palavra">súper</button>
+        <button class="palavra">romántica</button>
+    </div>
+
+    <h3>Sua resposta:</h3>
+    <div id="resposta-usuario"></div>
+
+    <button id="verificar">Verificar</button>
+    <p id="feedback"></p>
+
+    <!-- Conectar o JavaScript -->
+    <script src="script.js"></script>
+
+    <!-- Popup de sucesso -->
+    <div id="popup" class="popup" style="display: none">
+        <div class="popup-content">
+            <p>🎉 Parabéns, você é uma gostosa bilingue!! 🎯</p>
+            <p> Agora não tem mais volta, está contratualmente obrigada a ter que sair comigo em um date super romântico 😬</p>
+            <p> PS: eu tô em uma ofensiva de 🔥MUITOS DIAS🔥 sem conseguir parar de pensar em vc! Ass: Cris ❤️ </p>
+            <img src="https://media1.tenor.com/m/dBRpiMWxRvEAAAAd/kiss-cat.gif" alt="Sucesso!" class="popup-gif">
+            <button id="fechar-popup">OK</button>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

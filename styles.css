@@ -1,0 +1,139 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+h2, h3 {
+    color: #333;
+}
+
+#palavras-disponiveis, #resposta-usuario {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+button.palavra {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button.palavra:hover {
+    background-color: #45a049;
+}
+
+button.palavra:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#resposta-usuario {
+    min-height: 50px;
+    padding: 10px;
+    border: 2px dashed #999;
+    background-color: #fff;
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+button.resposta {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: grab;
+}
+
+button#verificar {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button#verificar:hover {
+    background-color: #0073a8;
+}
+
+#feedback {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+button.resposta:active {
+    cursor: grabbing;
+}
+
+.dragging {
+    opacity: 0.5;
+}
+
+/* Estilo do popup */
+.popup {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    font-size: 18px;
+    display: flex;
+    flex-direction: column; /* Flexbox em coluna */
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content img.popup-gif {
+    width: 250px; /* Ajuste o tamanho conforme necessário */
+    height: 250px;
+    margin-bottom: 15px;
+}
+
+.popup-content button {
+    margin-top: 15px; /* Um pouco de espaço entre o gif e o botão */
+    padding: 8px 16px;
+    background: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px; /* Largura fixa do botão */
+}
+
+.popup-content button:hover {
+    background: darkgreen;
+}
+
+
