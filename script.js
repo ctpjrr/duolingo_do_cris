@@ -6,6 +6,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const popup = document.getElementById("popup");
     const fecharPopupBtn = document.getElementById("fechar-popup");
     const palavrasDisponiveis = document.getElementById("palavras-disponiveis");
+    
+     // Função para embaralhar um array (Algoritmo de Fisher-Yates)
+     function embaralhar(array) {
+         for (let i = array.length - 1; i > 0; i--) {
+             const j = Math.floor(Math.random() * (i + 1));
+             [array[i], array[j]] = [array[j], array[i]];
+         }
+     }
+ 
+     // Embaralha os botões antes de exibi-los
+     const container = document.getElementById("palavras-disponiveis");
+     const palavrasArray = Array.from(palavras); // Converte NodeList em Array
+     embaralhar(palavrasArray);
+ 
+     // Remove os botões do container e os adiciona de volta embaralhados
+     palavrasArray.forEach(botao => container.appendChild(botao));
 
     let palavrasSelecionadas = [];
 
