@@ -5,23 +5,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const feedback = document.getElementById("feedback");
     const popup = document.getElementById("popup");
     const fecharPopupBtn = document.getElementById("fechar-popup");
-    const palavrasDisponiveis = document.getElementById("palavras-disponiveis");
+
+        // Função para embaralhar um array (Algoritmo de Fisher-Yates)
+        function embaralhar(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
     
-     // Função para embaralhar um array (Algoritmo de Fisher-Yates)
-     function embaralhar(array) {
-         for (let i = array.length - 1; i > 0; i--) {
-             const j = Math.floor(Math.random() * (i + 1));
-             [array[i], array[j]] = [array[j], array[i]];
-         }
-     }
- 
-     // Embaralha os botões antes de exibi-los
-     const container = document.getElementById("palavras-disponiveis");
-     const palavrasArray = Array.from(palavras); // Converte NodeList em Array
-     embaralhar(palavrasArray);
- 
-     // Remove os botões do container e os adiciona de volta embaralhados
-     palavrasArray.forEach(botao => container.appendChild(botao));
+        // Embaralha os botões antes de exibi-los
+        const container = document.getElementById("palavras-disponiveis");
+        const palavrasArray = Array.from(palavras); // Converte NodeList em Array
+        embaralhar(palavrasArray);
+    
+        // Remove os botões do container e os adiciona de volta embaralhados
+        palavrasArray.forEach(botao => container.appendChild(botao));
 
     let palavrasSelecionadas = [];
 
@@ -35,18 +34,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 botaoResposta.classList.add("resposta");
                 botaoResposta.setAttribute("draggable", true);
 
-                // Suporte para remover a palavra no desktop e mobile
-                function removerPalavra() {
-                    respostaUsuario.removeChild(botaoResposta);
-                    palavrasSelecionadas = palavrasSelecionadas.filter(p => p !== palavra.innerText);
-
-                    // Reinsere o botão na área de palavras disponíveis
-                    palavra.disabled = false;
-                    palavrasDisponiveis.appendChild(palavra);
-                }
-
-                botaoResposta.addEventListener("click", removerPalavra);
-                botaoResposta.addEventListener("touchstart", removerPalavra, { passive: true });
+                // Eventos para toque (mobile)
+                botaoResposta.addEventListener("touchstart", touchStart, { passive: false });
+                botaoResposta.addEventListener("touchend", touchEnd);
 
                 // Eventos para arrastar (desktop)
                 botaoResposta.addEventListener("dragstart", () => {
@@ -56,6 +46,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 botaoResposta.addEventListener("dragend", () => {
                     botaoResposta.classList.remove("dragging");
                     atualizarOrdem();
+                });
+
+                // Evento para remover palavra ao clicar
+                botaoResposta.addEventListener("click", function () {
+                    respostaUsuario.removeChild(botaoResposta);
+                    palavrasSelecionadas = palavrasSelecionadas.filter(p => p !== palavra.innerText);
+                    palavra.disabled = false;
                 });
 
                 respostaUsuario.appendChild(botaoResposta);
@@ -95,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     verificarBtn.addEventListener("click", function () {
-        const respostaCorreta = ["Yo", "Leticia", "acepto", "salir", "con", "Cris", "en", "una", "cita", "súper", "romántica"];
+        const respostaCorreta = ["Yo", "Leticia", "acepto", "salir", "con", "Cris", "en", "una", "cita", "súper", "romántica" ];
         if (JSON.stringify(palavrasSelecionadas) === JSON.stringify(respostaCorreta)) {
             feedback.innerText = "✅ Correto! Parabéns!";
             feedback.style.color = "green";
@@ -106,8 +103,71 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Fechar popup ao clicar no botão "OK"
-    fecharPopupBtn.addEventListener("click", function () {
+    //fechar popup se clicar no ok
+    fecharPopupBtn.addEventListener("click", function () { 
         popup.style.display = "none";
     });
+
+
+    // 🔹 Suporte a dispositivos móveis (Toque + Arrastar) com centralização perfeita
+    let activeElement = null;
+    let cloneElement = null;
+    let offsetX = 0, offsetY = 0;
+
+    function touchStart(event) {
+        event.preventDefault(); // Evita o clique padrão
+        document.body.style.overflow = "hidden"; // 🔥 Bloqueia a rolagem da página
+
+        activeElement = event.target;
+
+        // Pegamos a posição do toque
+        const touch = event.touches[0];
+        const rect = activeElement.getBoundingClientRect();
+        
+        // Calculamos o deslocamento do toque dentro do botão
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+
+        // Criamos um clone para seguir o dedo
+        cloneElement = activeElement.cloneNode(true);
+        cloneElement.style.position = "absolute";
+        cloneElement.style.opacity = "0.7";
+        cloneElement.style.pointerEvents = "none";
+        cloneElement.style.width = rect.width + "px"; // Mantém o mesmo tamanho
+        cloneElement.style.height = rect.height + "px";
+        cloneElement.style.left = touch.clientX - offsetX + "px";
+        cloneElement.style.top = touch.clientY - offsetY + "px";
+
+        document.body.appendChild(cloneElement);
+        document.addEventListener("touchmove", touchMove, { passive: false });
+    }
+
+    function touchMove(event) {
+        event.preventDefault(); // 🔥 Bloqueia a rolagem ao mover o item
+        const touch = event.touches[0];
+
+        // Movemos o clone no dedo com centralização correta
+        cloneElement.style.left = touch.clientX - offsetX + "px";
+        cloneElement.style.top = touch.clientY - offsetY + "px";
+    }
+
+    function touchEnd(event) {
+        document.removeEventListener("touchmove", touchMove);
+        document.body.style.overflow = ""; // 🔥 Reativa a rolagem da página
+
+        document.body.removeChild(cloneElement);
+        cloneElement = null;
+
+        const touch = event.changedTouches[0];
+        const afterElement = getDragAfterElement(respostaUsuario, touch.clientX);
+
+        if (afterElement == null) {
+            respostaUsuario.appendChild(activeElement);
+        } else {
+            respostaUsuario.insertBefore(activeElement, afterElement);
+        }
+
+        activeElement = null;
+        atualizarOrdem();
+    }
 });
